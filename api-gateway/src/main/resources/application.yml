@@ -1,6 +1,23 @@
 spring:
   application:
-    name: banking-api-gateway
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          # removing prefix to identify the correct API, Otherwise, http://localhost:8082/user will route into http://localhost:8083/user
+          filters:
+            - StripPrefix=1
+        - id: fund-transfer-service
+          uri: lb://fund-transfer-service
+          predicates:
+            - Path=/fund-transfer/**
+          filters:
+            - StripPrefix=1
+
 server:
   port: 8082
 
@@ -8,3 +25,4 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8081/eureka
+

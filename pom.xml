@@ -8,31 +8,25 @@
         <version>3.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.jolly</groupId>
+
+    <groupId>org.jolly</groupId>
     <artifactId>microservice</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>microservices</name>
-    <description>microservices</description>
-    <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2022.0.2</spring-cloud.version>
-    </properties>
+    <version>1.0-SNAPSHOT</version>
     <modules>
         <module>service-registry</module>
+        <module>user-service</module>
+        <module>fund-transfer-service</module>
+        <module>api-gateway</module>
     </modules>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-    </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud.version>2022.0.2</spring-cloud.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
