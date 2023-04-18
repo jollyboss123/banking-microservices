@@ -1,10 +1,10 @@
-package com.jolly.microservice;
+package com.jolly.apigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroservicesApplicationTests {
+class ApiGatewayApplicationTests {
 
     @Test
     void contextLoads() {
