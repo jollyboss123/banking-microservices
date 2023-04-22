@@ -18,6 +18,7 @@
         <module>user-service</module>
         <module>fund-transfer-service</module>
         <module>api-gateway</module>
+        <module>core-banking-service</module>
     </modules>
 
     <properties>
