@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+    networks:
+      - keycloak-network
+    ports:
+      - "3307:3306"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.0 # must use this image for ARM-compatibility
+    container_name: keycloak
+    restart: unless-stopped
+    command: [ "start-dev" ]
+    depends_on:
+      - mariadb
+    environment:
+      DB_VENDOR: mariadb
+      DB_ADDR: mariadb
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    networks:
+      - keycloak-network
+    ports:
+      - "8080:8080"
+
+networks:
+  keycloak-network:
+    name: keycloak-network
+
+
