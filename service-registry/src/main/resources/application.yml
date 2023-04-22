@@ -5,7 +5,7 @@ eureka:
   client:
     service-url:
       # setting custom URL for as the default zone otherwise, Eureka will use http://localhost:8761 as default zone
-      default-client: http://localhost:8081/eureka
+      defaultZone: http://localhost:8081/eureka
     # otherwise eureka will try to register this server as a client to itself by default config
     fetch-registry: false
     # otherwise it will try to fetch details about all the registered services from itself
