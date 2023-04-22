@@ -2,18 +2,20 @@ package com.jolly.corebankingservice.model.entity;
 
 import com.jolly.corebankingservice.model.TransactionType;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 /**
  * @author jolly
  */
+@Builder
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "banking_core_transaction")
+@AllArgsConstructor
 public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
