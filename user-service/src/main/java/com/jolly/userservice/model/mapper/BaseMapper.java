@@ -1,4 +1,4 @@
-package com.jolly.corebankingservice.model.mapper;
+package com.jolly.userservice.model.mapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 /**
  * @author jolly
  */
-//TODO: switch to use MapStruct
 public abstract class BaseMapper<E, D> {
+
     public abstract E convertToEntity(D dto, Object... args);
 
     public abstract D convertToDto(E entity, Object... args);
@@ -35,4 +35,5 @@ public abstract class BaseMapper<E, D> {
     public Set<D> convertToDtoSet(Collection<E> entity, Object... args) {
         return new HashSet<>(convertToDto(entity, args));
     }
+
 }

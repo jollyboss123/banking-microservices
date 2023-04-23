@@ -9,6 +9,11 @@ import java.util.List;
 /**
  * @author jolly
  */
+
+/**
+ * User base
+ * multiple bank accounts per user
+ */
 @Getter
 @Setter
 @Entity

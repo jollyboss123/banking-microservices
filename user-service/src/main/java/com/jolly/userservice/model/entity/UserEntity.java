@@ -1,5 +1,6 @@
-package com.jolly.corebankingservice.model.entity;
+package com.jolly.userservice.model.entity;
 
+import com.jolly.userservice.model.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,21 +8,19 @@ import lombok.Setter;
 /**
  * @author jolly
  */
-
-/**
- * to store 3rd party utility payment numbers
- */
 @Getter
 @Setter
 @Entity
-@Table(name = "banking_core_utility_account")
-public class UtilityAccountEntity {
+@Table(name = "user")
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private String number;
-    private String providerName;
+    private String authId;
+    private String identification;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 }
