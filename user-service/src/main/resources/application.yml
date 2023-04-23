@@ -1,6 +1,13 @@
 spring:
   application:
     name: user-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/banking_core_user_service
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 server:
   port: 8083
@@ -10,3 +17,14 @@ eureka:
     service-url:
       defaultZone: http://localhost:8081/eureka
 
+app:
+  config:
+    keycloak:
+      server-url: http://localhost:8080
+      realm: banking-microservice
+      clientId: banking-api-client
+      client-secret: ivvjFDtj0kLbDRrVY67kh4BLJUEEtGeU
+
+info:
+  app:
+    name: ${spring.application.name}
