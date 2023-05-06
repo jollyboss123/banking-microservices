@@ -23,7 +23,7 @@ app:
       server-url: http://localhost:8080
       realm: banking-microservice
       clientId: banking-api-client
-      client-secret: ivvjFDtj0kLbDRrVY67kh4BLJUEEtGeU
+      client-secret: rtTzAHZBUXQSBrFGWaO4zldhgERRjTNh
 
 info:
   app:
