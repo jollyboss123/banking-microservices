@@ -6,6 +6,8 @@ import com.jolly.userservice.model.dto.request.UserUpdateRequest;
 import com.jolly.userservice.model.entity.UserEntity;
 import com.jolly.userservice.model.mapper.UserMapper;
 import com.jolly.userservice.model.repository.UserRepository;
+import com.jolly.userservice.model.rest.UserResponse;
+import com.jolly.userservice.service.rest.BankingCoreRestClient;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final KeycloakUserService keycloakUserService;
     private final UserRepository userRepository;
+    private final BankingCoreRestClient bankingCoreRestClient;
 
     private final UserMapper userMapper = new UserMapper();
 
@@ -39,29 +42,38 @@ public class UserService {
             throw new RuntimeException("This email has been registered as a user. Please check and retry.");
         }
 
-        UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEmail(userDTO.getEmail());
-        userRepresentation.setEmailVerified(false);
-        userRepresentation.setEnabled(false);
-        userRepresentation.setUsername(userDTO.getEmail());
+        UserResponse userResponse = bankingCoreRestClient.readUser(userDTO.getIdentification());
 
-        CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
-        credentialRepresentation.setValue(userDTO.getPassword());
-        credentialRepresentation.setTemporary(false);
-        userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
+        if (userResponse != null) {
 
-        Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+            if (userResponse.getEmail() == null || !userResponse.getEmail().equals(userDTO.getEmail())) {
+                throw new RuntimeException("Incorrect email. Please check and retry.");
+            }
 
-        if (userCreationResponse == 201) {
-            log.info("User created under given username: {}", userRepresentation.getUsername());
+            UserRepresentation userRepresentation = new UserRepresentation();
+            userRepresentation.setEmail(userDTO.getEmail());
+            userRepresentation.setEmailVerified(false);
+            userRepresentation.setEnabled(false);
+            userRepresentation.setUsername(userDTO.getEmail());
 
-            List<UserRepresentation> userRepresentationList = keycloakUserService.readUserByEmail(userRepresentation.getEmail());
-            userDTO.setAuthId(userRepresentationList.get(0).getId());
-            userDTO.setStatus(Status.PENDING);
-            userDTO.setIdentification(UUID.randomUUID().toString());
+            CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
+            credentialRepresentation.setValue(userDTO.getPassword());
+            credentialRepresentation.setTemporary(false);
+            userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
 
-            UserEntity userEntity = userRepository.save(userMapper.convertToEntity(userDTO));
-            return userMapper.convertToDto(userEntity);
+            Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
+
+            if (userCreationResponse == 201) {
+                log.info("User created under given username: {}", userRepresentation.getUsername());
+
+                List<UserRepresentation> userRepresentationList = keycloakUserService.readUserByEmail(userRepresentation.getEmail());
+                userDTO.setAuthId(userRepresentationList.get(0).getId());
+                userDTO.setStatus(Status.PENDING);
+                userDTO.setIdentification(UUID.randomUUID().toString());
+
+                UserEntity userEntity = userRepository.save(userMapper.convertToEntity(userDTO));
+                return userMapper.convertToDto(userEntity);
+            }
         }
 
         throw new RuntimeException("We couldn't find user under given identification. Please check and retry");

@@ -22,7 +22,7 @@ public class UserService {
     public UserDTO readUser(String identificationNumber) {
         UserEntity userEntity = userRepository
                 .findByIdentificationNumber(identificationNumber)
-                .orElse(new UserEntity());
+                .orElse(null);
         return userMapper.convertToDto(userEntity);
     }
 
