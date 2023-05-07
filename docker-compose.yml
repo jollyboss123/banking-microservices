@@ -19,7 +19,9 @@ services:
     image: quay.io/keycloak/keycloak:18.0.0 # must use this image for ARM-compatibility
     container_name: keycloak
     restart: unless-stopped
-    command: [ "start-dev" ]
+    command:
+      - "start-dev"
+      - "-Dkeycloak.import=/opt/jboss/keycloak/standalone/configuration/keycloak-export.json"
     depends_on:
       - mariadb
     environment:
@@ -30,6 +32,9 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
+    volumes:
+      - keycloak-data:/opt/jboss/keycloak/standalone/data
+      - ./keycloak-export.json:/opt/jboss/keycloak/standalone/configuration/keycloak-export.json
     networks:
       - keycloak-network
     ports:
@@ -38,5 +43,8 @@ services:
 networks:
   keycloak-network:
     name: keycloak-network
+
+volumes:
+  keycloak-data:
 
 
