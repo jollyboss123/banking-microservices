@@ -1,5 +1,6 @@
 package com.jolly.corebankingservice.service;
 
+import com.jolly.corebankingservice.exception.EntityNotFoundException;
 import com.jolly.corebankingservice.model.dto.UserDTO;
 import com.jolly.corebankingservice.model.entity.UserEntity;
 import com.jolly.corebankingservice.model.mapper.UserMapper;
@@ -22,7 +23,7 @@ public class UserService {
     public UserDTO readUser(String identificationNumber) {
         UserEntity userEntity = userRepository
                 .findByIdentificationNumber(identificationNumber)
-                .orElse(null);
+                .orElseThrow(EntityNotFoundException::new);
         return userMapper.convertToDto(userEntity);
     }
 

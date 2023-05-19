@@ -1,5 +1,9 @@
 package com.jolly.userservice.service;
 
+import com.jolly.userservice.exception.GlobalErrorCode;
+import com.jolly.userservice.exception.InvalidBankingUserException;
+import com.jolly.userservice.exception.InvalidEmailException;
+import com.jolly.userservice.exception.UserAlreadyRegisteredException;
 import com.jolly.userservice.model.Status;
 import com.jolly.userservice.model.dto.UserDTO;
 import com.jolly.userservice.model.dto.request.UserUpdateRequest;
@@ -39,7 +43,7 @@ public class UserService {
         List<UserRepresentation> userRepresentations = keycloakUserService.readUserByEmail(userDTO.getEmail());
 
         if (userRepresentations.size() > 0) {
-            throw new RuntimeException("This email has been registered as a user. Please check and retry.");
+            throw new UserAlreadyRegisteredException("This email has been registered as a user. Please check and retry.", GlobalErrorCode.ERROR_EMAIL_REGISTERED);
         }
 
         UserResponse userResponse = bankingCoreRestClient.readUser(userDTO.getIdentification());
@@ -47,7 +51,7 @@ public class UserService {
         if (userResponse != null) {
 
             if (userResponse.getEmail() == null || !userResponse.getEmail().equals(userDTO.getEmail())) {
-                throw new RuntimeException("Incorrect email. Please check and retry.");
+                throw new InvalidEmailException("Incorrect email. Please check and retry.", GlobalErrorCode.ERROR_INVALID_EMAIL);
             }
 
             UserRepresentation userRepresentation = new UserRepresentation();
@@ -76,7 +80,7 @@ public class UserService {
             }
         }
 
-        throw new RuntimeException("We couldn't find user under given identification. Please check and retry");
+        throw new InvalidBankingUserException("We couldn't find user under given identification. Please check and retry", GlobalErrorCode.ERROR_USER_NOT_FOUND_UNDER_NIC);
     }
 
     public List<UserDTO> readUsers(Pageable pageable) {

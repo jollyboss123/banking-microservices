@@ -38,7 +38,7 @@ spring:
           banking-core-client:
             provider: keycloak
             client-id: banking-core-client
-            client-secret: 10gii5bEP7Y750OlxmTB4aIQqYrtOcNT
+            client-secret: AAMKmlMK4tF0eiOtrEhSQyCDvSik6FRv
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8080/login/oauth2/code/keycloak
             scope: openid
